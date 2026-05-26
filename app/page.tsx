@@ -1,9 +1,10 @@
-import Image from "next/image";
-
+import SpendForm from "@/components/forms/SpendForm";
 export default function Home() {
   return (
     <>
+      <SpendForm />
     </>
       
   );
 }
+
