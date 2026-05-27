@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { TOOL_PLANS, ToolName } from "@/lib/audit/types";
-import { PRIMARY_USE_CASES } from "@/lib/audit/constants";
+import { ToolName } from "@/lib/audit/types";
+import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
 type FormData = {
   toolName: string;
   planType: string;
