@@ -4,8 +4,8 @@
 //     teamSize -> num
 //     primaryUseCase -> primary_use_case from constant
 
-import { TOOL_PLANS, PRIMARY_USE_CASES } from "@/lib/audit/constants";
-import { Plan, ToolName, UseCase } from "@/lib/audit/types";
+import { TOOL_PLANS, PRIMARY_USE_CASES } from "../lib/audit/constants";
+import { Plan, ToolName, UseCase } from "../lib/audit/types";
 
 type Input<T extends ToolName> = {
     toolName: T;
