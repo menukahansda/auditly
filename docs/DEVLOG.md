@@ -29,3 +29,20 @@
 - Took time to decide optimal conditions and downgrade rules for each plan 
 - Selected appropriate test cases for the audit engine
 - Got stuck while designing a reusable localStorage hook (hydration issue)
+
+---
+
+## 27-05-2026
+
+### Issues
+- Took a long time to understand type conflicts
+
+---
+
+## 28-05-2026
+
+### Completed
+- completed form input validation
+
+### Issues
+- Understanding types in ts
