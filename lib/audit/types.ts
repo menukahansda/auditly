@@ -42,6 +42,7 @@ export type AuditResult = {
 
     summary: string;
     isHighSavings: boolean;
+    cta: string;
 }
 //     3. Audit results page
 //  Per-tool breakdown: current spend → recommended action → savings + 1-
