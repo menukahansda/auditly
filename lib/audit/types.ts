@@ -1,45 +1,42 @@
-// User input types
-export type ToolName = "Cursor" | "GitHub Copilot" | "Claude" | "ChatGPT" | "Anthropic" | "OpenAI" | "Gemini" | "Windsurf";
+import { TOOL_PLANS, PRIMARY_USE_CASES } from "./constants";
 
-export const TOOL_PLANS={
-    "Cursor": ["Hobby", "Pro", "Pro+", "Ultra", "Team", "Enterprise"],
-    "GitHub Copilot": ["Free", "Pro", "Pro+", "Business", "Enterprise"],
-    "Claude": ["Free", "Pro", "Max", "Team", "Enterprise", "API direct"],
-    "ChatGPT": ["Free", "Go", "Plus", "Pro", "Business", "Enterprise", "API direct"],
-    "Anthropic": ["API direct"],
-    "OpenAI": ["API direct"],
-    "Gemini": ["Free", "Plus", "Pro", "Ultra", "API"],
-    "Windsurf": ["Free", "Pro", "Max", "Team"]
-} as const;
-
-export type Plan = (typeof TOOL_PLANS)[keyof typeof TOOL_PLANS][number];
-
-export type ToolInput = {
-    toolName: ToolName;
-    plan: Plan;
-    monthlySpend: number;
-    seats: number;
-}
+export type ToolName = keyof typeof TOOL_PLANS;
+export type Plan <T extends ToolName = ToolName> = typeof TOOL_PLANS[T][number];
+export type UseCase = typeof PRIMARY_USE_CASES[number];
+export type ToolInput = 
+    {
+        [K in ToolName]: {
+        toolName: K;
+        plan: Plan<K>;
+        monthlySpend: number;
+        seats: number;
+    }
+}[ToolName];
 
 export type UserInput = {
     tools: ToolInput[];
     teamSize: number;
-    useCase: "coding" | "writing" | "data" | "research" | "mixed";
+    useCase: UseCase;
 }
 
 // Output types
-export type ToolAuditResult = {
-    toolName: ToolName;
+export type ToolAuditResult<T extends ToolName = ToolName> = {
+    toolName: T;
     currentSpend: number;
-    recommendedPlan?: Plan;
+    recommendedPlan?: Plan<T>;
     recommendedAlternative?: ToolName;
     monthlySavings: number;
     annualSavings: number;
     reason: string;
 }
 
+type AllToolAuditResults =
+  { 
+    [K in ToolName]: ToolAuditResult<K> 
+}[ToolName];
+  
 export type AuditResult = {
-    tools: ToolAuditResult[];
+    tools: AllToolAuditResults[];
     totalMonthlySavings: number;
     totalAnnualSavings: number;
 
