@@ -58,8 +58,7 @@ function getDefaultAlternativePlan(
 
 function evaluateTool(
 	tool: ToolInput,
-	useCase: UserInput["useCase"],
-	teamSize: number
+	useCase: UserInput["useCase"]
 ): ToolAuditResult {
 	let recommendedPlan: Plan | undefined;
 	let recommendedAlternative: ToolName | undefined;
@@ -189,7 +188,7 @@ function evaluateTool(
 	// Mixed stack optimization
 	if (
 		useCase === "mixed" &&
-		teamSize <= 3 &&
+		tool.seats <= 3 &&
 		tool.toolName === "ChatGPT" &&
 		tool.plan === "Enterprise"
 	) {
@@ -349,8 +348,7 @@ export function generateAudit(
 		userInput.tools.map((tool) =>
 			evaluateTool(
 				tool,
-				userInput.useCase,
-				userInput.teamSize
+				userInput.useCase
 			)
 		); // tool audit result type for each tool
 
