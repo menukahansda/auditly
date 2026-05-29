@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { ToolName } from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
+import useLocalStorage from "@/hooks/useLocalStorage";
+
 type FormData = {
   toolName: string;
   planType: string;
@@ -12,7 +13,7 @@ type FormData = {
 };
 
 export default function SpendForm() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useLocalStorage<FormData>("SpendForm", {
     toolName: "",
     planType: "",
     monthlySpend: "",
