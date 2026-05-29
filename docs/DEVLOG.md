@@ -46,3 +46,18 @@
 
 ### Issues
 - Understanding types in ts
+
+---
+
+## 29-05-2026
+
+### Completed
+- Added tests for form input validation
+- Resolved the type issue in audit engine and exported the type from types.ts
+- Upgraded form state to become persistant with useLocalStorage
+- Added route for api to validate inputs and generate audit result
+
+### Issues
+- To add multiple tool option in the form 
+- Make variables in every file consistent
+- To make the form such that it takes multiple tools in single form
