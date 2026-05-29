@@ -9,25 +9,25 @@ import { Plan, ToolName, UseCase } from "../lib/audit/types";
 
 type Input<T extends ToolName> = {
     toolName: T;
-    planType: Plan<T>;
+    plan: Plan<T>;
     monthlySpend: number | "";
-    teamSize: number | "";
-    primaryUseCase: UseCase | "";
+    seats: number | "";
+    useCase: UseCase | "";
 }
 
 export function validateInput<T extends ToolName>(input: Input<T>): {valid: boolean; errors: string} {
    
-    const{toolName, planType, monthlySpend, teamSize, primaryUseCase} = input;
+    const{toolName, plan, monthlySpend, seats, useCase} = input;
 
     // check toolName 
     if(!toolName || !(toolName in TOOL_PLANS)){
         return {valid: false, errors: "Invalid tool name"};
     }
 
-    // check planType
+    // check plan
     const validPlans = TOOL_PLANS[toolName as ToolName] as readonly Plan[];
-    if(!planType || !validPlans.includes(planType as Plan<T>)){
-        return {valid: false, errors: "Invalid plan type for the selected tool"};
+    if(!plan || !validPlans.includes(plan as Plan<T>)){
+        return {valid: false, errors: "Invalid plan for the selected tool"};
     }
 
     // check monthlySpend
@@ -35,14 +35,14 @@ export function validateInput<T extends ToolName>(input: Input<T>): {valid: bool
         return {valid: false, errors: "Monthly spend must be a non-negative number"};
     }
 
-    // check teamSize
-    if(teamSize === "" || teamSize <= 0){
-        return {valid: false, errors: "Team size must be a positive number"};
+    // check seats
+    if(seats === "" || seats <= 0){
+        return {valid: false, errors: "Seats must be a positive number"};
     }
 
-    // check primaryUseCase
-    if(!primaryUseCase || !PRIMARY_USE_CASES.includes(primaryUseCase as UseCase)){
-        return {valid: false, errors: "Invalid primary use case"};
+    // check useCase
+    if(!useCase || !PRIMARY_USE_CASES.includes(useCase as UseCase)){
+        return {valid: false, errors: "Invalid use case"};
     }
     return {valid: true, errors: ""};
 }

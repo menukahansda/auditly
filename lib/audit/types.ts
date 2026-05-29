@@ -15,7 +15,6 @@ export type ToolInput =
 
 export type UserInput = {
     tools: ToolInput[];
-    teamSize: number;
     useCase: UseCase;
 }
 
