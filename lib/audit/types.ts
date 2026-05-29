@@ -30,7 +30,7 @@ export type ToolAuditResult<T extends ToolName = ToolName> = {
     reason: string;
 }
 
-type AllToolAuditResults =
+export type AllToolAuditResults =
   { 
     [K in ToolName]: ToolAuditResult<K> 
 }[ToolName];
