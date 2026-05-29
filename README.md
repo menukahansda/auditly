@@ -5,7 +5,7 @@ A free web app that helps startups understand and optimize their AI tool spendin
 This project is being built as part of an assignment.
 
 ## Live Demo
-[Deployed App Link](https://your-deployment-url.com)
+[Deployed App Link](https://auditly-tau.vercel.app/)
 
 ## Screenshots
 ![Screenshot-1](Screenshots/screenshot-1.png)
