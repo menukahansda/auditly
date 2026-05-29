@@ -3,6 +3,7 @@ import { PRICING } from "./pricing";
 import type {
 	AuditResult,
 	Plan,
+	AllToolAuditResults,
 	ToolAuditResult,
 	ToolInput,
 	ToolName,
@@ -351,29 +352,27 @@ export function generateAudit(
 				userInput.useCase,
 				userInput.teamSize
 			)
-		);
+		); // tool audit result type for each tool
 
 	const totals =
 		calculateTotals(toolResults);
 
-	const partialResult = {
-		tools: toolResults,
+	const partialResult: Omit<AuditResult, 'summary' | 'cta'> = {
+		tools: toolResults as AllToolAuditResults[],
 		totalMonthlySavings:
 			totals.totalMonthlySavings,
 		totalAnnualSavings:
 			totals.totalAnnualSavings,
 		isHighSavings:
 			totals.isHighSavings,
-		cta: generateCTA(
-			totals.totalMonthlySavings
-		),
-	};
-
+	}; // this is the result for a single tool
+	const cta = generateCTA(totals.totalMonthlySavings);
 	const summary =
 		generateSummary(partialResult);
 
 	return {
 		...partialResult,
+		cta,
 		summary,
 	};
 }
