@@ -1,10 +1,10 @@
 "use client";
-
+// make it so that user can send multiple tools in single form
 import { ToolName } from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
 import useLocalStorage from "@/hooks/useLocalStorage";
 
-type FormData = {
+export type AuditFormData = {
   toolName: string;
   planType: string;
   monthlySpend: number | "";
@@ -12,8 +12,12 @@ type FormData = {
   primaryUseCase: string;
 };
 
-export default function SpendForm() {
-  const [formData, setFormData] = useLocalStorage<FormData>("SpendForm", {
+type Props = {
+  handleSubmit: (formData : AuditFormData) => void;
+  loading: boolean;
+}
+export default function SpendForm({handleSubmit, loading}: Props) {
+  const [formData, setFormData] = useLocalStorage<AuditFormData>("SpendForm", {
     toolName: "",
     planType: "",
     monthlySpend: "",
@@ -22,9 +26,11 @@ export default function SpendForm() {
   });
   const toolNames = Object.keys(TOOL_PLANS) as ToolName[];
 
-  // function handleSubmit(e : React.ChangeEvent<HTMLInputElement>) {
-  //   e.preventDefault();
-  // }
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    handleSubmit(formData);
+  }
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-[#0a0a0a] px-4">
       <div className="w-full max-w-lg p-8 rounded-2xl bg-[#111111] border border-neutral-800 shadow-[0_0_60px_rgba(255,255,255,0.15)]">
@@ -32,7 +38,7 @@ export default function SpendForm() {
           AI Tool Spend Form
         </h1>
 
-        <form className="flex flex-col gap-4">
+        <form className="flex flex-col gap-4" onSubmit={onSubmit}>
           <select
             name="toolName"
             value={formData.toolName}
@@ -138,9 +144,10 @@ export default function SpendForm() {
 
           <button
             type="submit"
+            disabled={loading}
             className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
           >
-            Submit
+            {loading ? 'Submitting...' : 'Submit'}
           </button>
         </form>
       </div>
