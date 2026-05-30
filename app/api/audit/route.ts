@@ -29,6 +29,7 @@ export async function POST(request: NextRequest){
     const result = await generateAudit(data);
     return NextResponse.json(result, {status: 200});
     }catch(err){
+        console.error("Error processing audit request:", err);
         return NextResponse.json(
             {error: "Internal Server Error"},
             {status: 500}
