@@ -26,7 +26,7 @@ export default function SpendForm({handleSubmit, loading}: Props) {
   });
   const toolNames = Object.keys(TOOL_PLANS) as ToolName[];
 
-  function onSubmit(e: React.FormEvent) {
+  function onSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     handleSubmit(formData);
   }
