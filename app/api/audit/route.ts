@@ -5,12 +5,13 @@ import {generateAudit} from '@/lib/audit/engine';
 import { UserInput } from '@/lib/audit/types';
 
 export async function POST(request: NextRequest){
+    try{
     const userInput = await request.json();
     const data: UserInput = {
         tools: userInput.tools,
         useCase: userInput.useCase,
     };
-    data.tools.forEach(tool =>{
+    for(const tool of data.tools){
         const validated : {valid: boolean, errors: string} = 
             validateInput({
                 ...tool, 
@@ -18,10 +19,19 @@ export async function POST(request: NextRequest){
             });
             
         if(!validated.valid){
-            return NextResponse.json({error: validated.errors}, {status: 400});
+            return NextResponse.json(
+                {error: validated.errors}, 
+                {status: 400}
+            );
         }
-    })
-    
+    }
+
     const result = await generateAudit(data);
-    return NextResponse.json(result);
+    return NextResponse.json(result, {status: 200});
+    }catch(err){
+        return NextResponse.json(
+            {error: "Internal Server Error"},
+            {status: 500}
+        )
+    }
 }
