@@ -61,3 +61,13 @@
 - To add multiple tool option in the form 
 - Make variables in every file consistent
 - To make the form such that it takes multiple tools in single form
+
+---
+
+## 30-05-2026
+
+### Completed
+- Completed the post fetching hook(useAudit)
+- Added submit function to spendform
+- Fixed the app/api/audit route
+- 
