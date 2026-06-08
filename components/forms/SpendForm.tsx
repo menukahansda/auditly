@@ -100,7 +100,7 @@ export default function SpendForm({handleSubmit, loading}: Props) {
                   setFormData((prev) => ({
                     ...prev,
                     monthlySpend:
-                      e.target.value === "" ? "" : Number(e.target.value),
+                      e.target.value === "" ? "" : Number(e.target.value) < 0 ? 0 :Number(e.target.value),
                   }));
                 }}
                 className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
@@ -114,7 +114,7 @@ export default function SpendForm({handleSubmit, loading}: Props) {
                   setFormData((prev) => ({
                     ...prev,
                     teamSize:
-                      e.target.value === "" ? "" : Number(e.target.value),
+                      e.target.value === "" ? "" : Number(e.target.value) < 0 ? 0 : Number(e.target.value),
                   }));
                 }}
                 className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
