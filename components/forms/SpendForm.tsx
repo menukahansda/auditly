@@ -2,7 +2,8 @@
 // make it so that user can send multiple tools in single form
 import { ToolName } from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
-import useLocalStorage from "@/hooks/useLocalStorage";
+// import useLocalStorage from "@/hooks/useLocalStorage";
+import { useState } from "react";
 
 export type AuditFormData = {
   toolName: string;
@@ -17,7 +18,7 @@ type Props = {
   loading: boolean;
 }
 export default function SpendForm({handleSubmit, loading}: Props) {
-  const [formData, setFormData] = useLocalStorage<AuditFormData>("SpendForm", {
+  const [formData, setFormData] = useState<AuditFormData>({
     toolName: "",
     planType: "",
     monthlySpend: "",
