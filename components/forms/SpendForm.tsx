@@ -1,27 +1,34 @@
 "use client";
 // make it so that user can send multiple tools in single form
-import type { ToolName, AuditFormData} from "@/lib/audit/types";
+import type { ToolName, ToolFormData, AuditFormData } from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
 // import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 
 type Props = {
-  handleSubmit: (formData : AuditFormData) => void;
+  handleSubmit: (toolData: AuditFormData) => void;
   loading: boolean;
-}
-export default function SpendForm({handleSubmit, loading}: Props) {
+};
+export default function SpendForm({ handleSubmit, loading }: Props) {
   const [formData, setFormData] = useState<AuditFormData>({
+    tools: [],
+    primaryUseCase: "",
+  });
+  const [toolData, setToolData] = useState<ToolFormData>({
     toolName: "",
     planType: "",
     monthlySpend: "",
     teamSize: "",
-    primaryUseCase: "",
   });
   const toolNames = Object.keys(TOOL_PLANS) as ToolName[];
 
   function onSubmit(e: React.SubmitEvent) {
     e.preventDefault();
-    handleSubmit(formData);
+    const updatedFormData = {
+      ...formData,
+      tools: [...formData.tools, toolData],
+    };
+    handleSubmit(updatedFormData);
   }
 
   return (
@@ -33,10 +40,30 @@ export default function SpendForm({handleSubmit, loading}: Props) {
 
         <form className="flex flex-col gap-4" onSubmit={onSubmit}>
           <select
-            name="toolName"
-            value={formData.toolName}
+            value={formData.primaryUseCase}
             onChange={(e) => {
               setFormData((prev) => ({
+                ...prev,
+                primaryUseCase: e.target.value,
+              }));
+            }}
+            className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg"
+          >
+            <option value="" disabled>
+              Select primary use case
+            </option>
+
+            {PRIMARY_USE_CASES.map((useCase) => (
+              <option key={useCase} value={useCase}>
+                {useCase}
+              </option>
+            ))}
+          </select>
+          <select
+            name="toolName"
+            value={toolData.toolName}
+            onChange={(e) => {
+              setToolData((prev) => ({
                 ...prev,
                 toolName: e.target.value,
                 planType: "",
@@ -56,16 +83,15 @@ export default function SpendForm({handleSubmit, loading}: Props) {
             ))}
           </select>
 
-          {formData.toolName && (
+          {toolData.toolName && (
             <select
-              value={formData.planType}
+              value={toolData.planType}
               onChange={(e) => {
-                setFormData((prev) => ({
+                setToolData((prev) => ({
                   ...prev,
                   planType: e.target.value,
                   monthlySpend: "",
                   teamSize: "",
-                  primaryUseCase: "",
                 }));
               }}
               className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg outline-none focus:border-neutral-500"
@@ -74,7 +100,7 @@ export default function SpendForm({handleSubmit, loading}: Props) {
                 Select a plan
               </option>
 
-              {TOOL_PLANS[formData.toolName as ToolName]?.map((plan) => (
+              {TOOL_PLANS[toolData.toolName as ToolName]?.map((plan) => (
                 <option key={plan} value={plan}>
                   {plan}
                 </option>
@@ -82,17 +108,21 @@ export default function SpendForm({handleSubmit, loading}: Props) {
             </select>
           )}
 
-          {formData.planType && (
+          {toolData.planType && (
             <div className="flex flex-col gap-4">
               <input
                 type="number"
                 placeholder="Monthly Spend"
-                value={formData.monthlySpend}
+                value={toolData.monthlySpend}
                 onChange={(e) => {
-                  setFormData((prev) => ({
+                  setToolData((prev) => ({
                     ...prev,
                     monthlySpend:
-                      e.target.value === "" ? "" : Number(e.target.value) < 0 ? 0 :Number(e.target.value),
+                      e.target.value === ""
+                        ? ""
+                        : Number(e.target.value) < 0
+                          ? 0
+                          : Number(e.target.value),
                   }));
                 }}
                 className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
@@ -101,46 +131,54 @@ export default function SpendForm({handleSubmit, loading}: Props) {
               <input
                 type="number"
                 placeholder="Team Size"
-                value={formData.teamSize}
+                value={toolData.teamSize}
                 onChange={(e) => {
-                  setFormData((prev) => ({
+                  setToolData((prev) => ({
                     ...prev,
                     teamSize:
-                      e.target.value === "" ? "" : Number(e.target.value) < 0 ? 0 : Number(e.target.value),
+                      e.target.value === ""
+                        ? ""
+                        : Number(e.target.value) < 0
+                          ? 0
+                          : Number(e.target.value),
                   }));
                 }}
                 className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
               />
-
-              <select
-                value={formData.primaryUseCase}
-                onChange={(e) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    primaryUseCase: e.target.value,
-                  }));
-                }}
-                className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg"
-              >
-                <option value="" disabled>
-                  Select primary use case
-                </option>
-
-                {PRIMARY_USE_CASES.map((useCase) => (
-                  <option key={useCase} value={useCase}>
-                    {useCase}
-                  </option>
-                ))}
-              </select>
             </div>
           )}
-
           <button
-            type="submit"
-            disabled={loading}
+            type="button"
+            onClick={() => {
+              setFormData((prev) => ({
+                ...prev,
+                tools: [...prev.tools, toolData],
+              }));
+              setToolData({
+                toolName: "",
+                planType: "",
+                monthlySpend: "",
+                teamSize: "",
+              });
+            }}
+            disabled={
+              toolData.toolName === "" ||
+              toolData.planType === "" ||
+              toolData.monthlySpend === "" ||
+              toolData.teamSize === "" ||
+              formData.primaryUseCase === "" ||
+              loading
+            }
             className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
           >
-            {loading ? 'Submitting...' : 'Submit'}
+            Add more tools
+          </button>
+          <button
+            type="submit"
+            disabled={formData.primaryUseCase === "" || formData.tools.length === 0 ||loading}
+            className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
+          >
+            {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
       </div>
