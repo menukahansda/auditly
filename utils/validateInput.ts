@@ -27,11 +27,15 @@ export function validateTool(input: ToolFormData): {valid: boolean; errors: stri
         return {valid: false, errors: "Monthly spend must be a non-negative number"};
     }
 
-    // check seats
-    if(seats === "" || seats <= 0){
-        return {valid: false, errors: "Seats must be a positive number"};
+    // check teamSize
+    if(teamSize === "" || teamSize <= 0){
+        return {valid: false, errors: "Team size must be a positive number"};
     }
 
+    return {valid: true, errors: ""};
+}
+
+export function validateUseCase(useCase: string): {valid: boolean; errors: string} {
     // check useCase
     if(!useCase || !PRIMARY_USE_CASES.includes(useCase as UseCase)){
         return {valid: false, errors: "Invalid use case"};
