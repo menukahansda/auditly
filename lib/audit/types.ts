@@ -1,56 +1,60 @@
 import { TOOL_PLANS, PRIMARY_USE_CASES } from "./constants";
 
+// Input types for api 
 export type ToolName = keyof typeof TOOL_PLANS;
-export type Plan <T extends ToolName = ToolName> = typeof TOOL_PLANS[T][number];
-export type UseCase = typeof PRIMARY_USE_CASES[number];
-export type ToolInput = 
-    {
-        [K in ToolName]: {
-        toolName: K;
-        plan: Plan<K>;
-        monthlySpend: number;
-        seats: number;
-    }
+export type Plan<T extends ToolName = ToolName> =
+  (typeof TOOL_PLANS)[T][number];
+export type UseCase = (typeof PRIMARY_USE_CASES)[number];
+export type ToolInput = {
+  [K in ToolName]: {
+    toolName: K;
+    plan: Plan<K>;
+    monthlySpend: number;
+    teamSize: number;
+  };
 }[ToolName];
 
 export type UserInput = {
-    tools: ToolInput[];
-    useCase: UseCase;
-}
+  tools: ToolInput[];
+  useCase: UseCase;
+};
 
+// Input types for form
+export type ToolFormData = {
+    toolName: string;
+    planType: string;
+    monthlySpend: number | "";
+    teamSize: number | "";
+}
 export type AuditFormData = {
-  toolName: string;
-  planType: string;
-  monthlySpend: number | "";
-  teamSize: number | "";
+  tools : ToolFormData[];
   primaryUseCase: string;
 };
 
 // Output types
 export type ToolAuditResult<T extends ToolName = ToolName> = {
-    toolName: T;
-    currentSpend: number;
-    recommendedPlan?: Plan<T>;
-    recommendedAlternative?: ToolName;
-    monthlySavings: number;
-    annualSavings: number;
-    reason: string;
-}
+  toolName: T;
+  currentSpend: number;
+  recommendedPlan?: Plan<T>;
+  recommendedAlternative?: ToolName;
+  monthlySavings: number;
+  annualSavings: number;
+  reason: string;
+};
 
-export type AllToolAuditResults =
-  { 
-    [K in ToolName]: ToolAuditResult<K> 
+export type AllToolAuditResults = {
+  [K in ToolName]: ToolAuditResult<K>;
 }[ToolName];
-  
-export type AuditResult = {
-    tools: AllToolAuditResults[];
-    totalMonthlySavings: number;
-    totalAnnualSavings: number;
 
-    summary: string;
-    isHighSavings: boolean;
-    cta: string;
-}
+export type AuditResult = {
+  tools: AllToolAuditResults[];
+  totalMonthlySavings: number;
+  totalAnnualSavings: number;
+
+  summary: string;
+  isHighSavings: boolean;
+  cta: string;
+};
 //     3. Audit results page
 //  Per-tool breakdown: current spend → recommended action → savings + 1-
 // sentence reason
