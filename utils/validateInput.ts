@@ -5,19 +5,11 @@
 //     primaryUseCase -> primary_use_case from constant
 
 import { TOOL_PLANS, PRIMARY_USE_CASES } from "../lib/audit/constants";
-import { Plan, ToolName, UseCase } from "../lib/audit/types";
+import type { Plan, ToolName, UseCase, ToolFormData } from "../lib/audit/types";
 
-type Input<T extends ToolName> = {
-    toolName: T;
-    plan: Plan<T>;
-    monthlySpend: number | "";
-    seats: number | "";
-    useCase: UseCase | "";
-}
-
-export function validateInput<T extends ToolName>(input: Input<T>): {valid: boolean; errors: string} {
+export function validateTool(input: ToolFormData): {valid: boolean; errors: string} {
    
-    const{toolName, plan, monthlySpend, seats, useCase} = input;
+    const{toolName, planType, monthlySpend, teamSize} = input;
 
     // check toolName 
     if(!toolName || !(toolName in TOOL_PLANS)){
@@ -26,7 +18,7 @@ export function validateInput<T extends ToolName>(input: Input<T>): {valid: bool
 
     // check plan
     const validPlans = TOOL_PLANS[toolName as ToolName] as readonly Plan[];
-    if(!plan || !validPlans.includes(plan as Plan<T>)){
+    if(!planType || !validPlans.includes(planType as Plan<ToolName>)){
         return {valid: false, errors: "Invalid plan for the selected tool"};
     }
 
