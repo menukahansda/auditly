@@ -2,7 +2,7 @@
 
 import SpendForm from "@/components/forms/SpendForm";
 import useAudit from "@/hooks/useAudit";
-import type { AuditFormData } from '@/components/forms/SpendForm';
+import type { AuditFormData} from "@/lib/audit/types";
 
 export default function Home() {
   const {submitAudit, loading, error, result} = useAudit();

@@ -1,6 +1,6 @@
 // create a middle hook for all the fetching
 import { useState} from 'react';
-import type { AuditFormData } from '@/components/forms/SpendForm';
+import type { AuditFormData} from "@/lib/audit/types";
 import {AuditResult} from "@/lib/audit/types";
 
 export default function useAudit(){

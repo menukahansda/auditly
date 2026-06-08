@@ -1,17 +1,9 @@
 "use client";
 // make it so that user can send multiple tools in single form
-import { ToolName } from "@/lib/audit/types";
+import type { ToolName, AuditFormData} from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
 // import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
-
-export type AuditFormData = {
-  toolName: string;
-  planType: string;
-  monthlySpend: number | "";
-  teamSize: number | "";
-  primaryUseCase: string;
-};
 
 type Props = {
   handleSubmit: (formData : AuditFormData) => void;

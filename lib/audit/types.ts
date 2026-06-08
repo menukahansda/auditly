@@ -18,6 +18,14 @@ export type UserInput = {
     useCase: UseCase;
 }
 
+export type AuditFormData = {
+  toolName: string;
+  planType: string;
+  monthlySpend: number | "";
+  teamSize: number | "";
+  primaryUseCase: string;
+};
+
 // Output types
 export type ToolAuditResult<T extends ToolName = ToolName> = {
     toolName: T;
