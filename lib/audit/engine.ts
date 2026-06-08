@@ -73,7 +73,7 @@ function evaluateTool(
 	if (
 		tool.toolName === "ChatGPT" &&
 		tool.plan === "Business" &&
-		tool.seats <= 2
+		tool.teamSize <= 2
 	) {
 		recommendedPlan = "Plus";
 
@@ -86,7 +86,7 @@ function evaluateTool(
 	else if (
 		tool.toolName === "ChatGPT" &&
 		tool.plan === "Enterprise" &&
-		tool.seats <= 5
+		tool.teamSize <= 5
 	) {
 		recommendedPlan = "Business";
 
@@ -99,7 +99,7 @@ function evaluateTool(
 	else if (
 		tool.toolName === "Claude" &&
 		tool.plan === "Team" &&
-		tool.seats === 1
+		tool.teamSize === 1
 	) {
 		recommendedPlan = "Pro";
 
@@ -112,7 +112,7 @@ function evaluateTool(
 	else if (
 		tool.toolName === "Cursor" &&
 		tool.plan === "Team" &&
-		tool.seats === 1
+		tool.teamSize === 1
 	) {
 		recommendedPlan = "Pro";
 
@@ -137,7 +137,7 @@ function evaluateTool(
 	else if (
 		tool.toolName === "GitHub Copilot" &&
 		tool.plan === "Enterprise" &&
-		tool.seats <= 10
+		tool.teamSize <= 10
 	) {
 		recommendedPlan = "Business";
 
@@ -188,7 +188,7 @@ function evaluateTool(
 	// Mixed stack optimization
 	if (
 		useCase === "mixed" &&
-		tool.seats <= 3 &&
+		tool.teamSize <= 3 &&
 		tool.toolName === "ChatGPT" &&
 		tool.plan === "Enterprise"
 	) {
@@ -212,7 +212,7 @@ function evaluateTool(
 			recommendedMonthlyCost =
 				calculatePlanCost(
 					pricePerSeat,
-					tool.seats
+					tool.teamSize
 				);
 		}
 	}
@@ -234,7 +234,7 @@ function evaluateTool(
 				recommendedMonthlyCost =
 					calculatePlanCost(
 						altPrice,
-						tool.seats
+						tool.teamSize
 					);
 			}
 		}
