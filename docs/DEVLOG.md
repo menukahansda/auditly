@@ -71,3 +71,14 @@
 - Added submit function to spendform
 - Fixed the app/api/audit route
 - 
+
+---
+
+## 08-06-2026
+
+### Completed
+- Moved `AuditFormData` type to types file
+- Enforced non-negative values on number inputs
+- Added option to add multiple tools in the form
+- Fixed the tool input validation and seperated validation for tool input and usecase
+- Converted the data type from AuditFormData type to UserInput before running the audit engine
