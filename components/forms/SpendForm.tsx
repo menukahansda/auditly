@@ -71,8 +71,8 @@ export default function SpendForm({handleSubmit, loading}: Props) {
                 setFormData((prev) => ({
                   ...prev,
                   planType: e.target.value,
-                  monthlySpend: 0,
-                  teamSize: 0,
+                  monthlySpend: "",
+                  teamSize: "",
                   primaryUseCase: "",
                 }));
               }}
