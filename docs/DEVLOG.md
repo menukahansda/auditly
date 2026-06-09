@@ -82,3 +82,10 @@
 - Added option to add multiple tools in the form
 - Fixed the tool input validation and seperated validation for tool input and usecase
 - Converted the data type from AuditFormData type to UserInput before running the audit engine
+
+---
+
+## 09-06-2026
+
+### Completed
+- Add router to navigate to audit result page
