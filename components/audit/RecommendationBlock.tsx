@@ -1,9 +1,14 @@
 "use client";
 
-export default function RecommendationBlock() {
-    return (
-        <>
-        <h1>Recommendation Block</h1>
-        </>
-    )
+import type { ToolAuditResult } from "@/lib/audit/types";
+export default function RecommendationBlock({
+  tool,
+}: {
+  tool: ToolAuditResult;
+}) {
+  return (
+    <>
+      <h1>Recommendation Block</h1>
+    </>
+  );
 }

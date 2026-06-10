@@ -1,9 +1,11 @@
 "use client";
 
-export default function AuditSummary() {
-    return (
-        <>
-        <h1>Audit Summary</h1>
-        </>
-    )
+import type { ToolAuditResult } from "@/lib/audit/types";
+
+export default function AuditSummary({ tool }: { tool: ToolAuditResult }) {
+  return (
+    <>
+      <h1>Audit Summary</h1>
+    </>
+  );
 }

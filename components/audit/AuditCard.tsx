@@ -1,9 +1,11 @@
 "use client";
 
-export default function AuditCard() {
-    return (
-        <>
-        <h1>Audit Card</h1>
-        </>
-    )
+import type { ToolAuditResult } from "@/lib/audit/types";
+
+export default function AuditCard({ tool }: { tool: ToolAuditResult }) {
+  return (
+    <>
+      <h1>Audit Card</h1>
+    </>
+  );
 }
