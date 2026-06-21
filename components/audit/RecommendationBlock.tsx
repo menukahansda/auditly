@@ -8,7 +8,9 @@ export default function RecommendationBlock({
 }) {
   return (
     <>
-      <h1>Recommendation Block</h1>
+      <div className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg">
+
+      </div>
     </>
   );
 }
