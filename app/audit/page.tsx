@@ -25,7 +25,9 @@ export default function AuditPage() {
             summary={result.summary}
             isHighSavings={result.isHighSavings}
           />
-          {/* <RecommendationBlock tools={result.tools} /> */}
+          {result.tools.map((tool: ToolAuditResult) => (
+            <RecommendationBlock key={tool.toolName} tool={tool} />
+          ))}
         </div>
       </div>
     </>
