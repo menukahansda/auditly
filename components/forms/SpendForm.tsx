@@ -22,12 +22,19 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
     teamSize: "",
   });
   const toolNames = Object.keys(TOOL_PLANS) as ToolName[];
-
+  const blockNonNumeric = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (["e", "E", "+", "-", "."].includes(e.key)) e.preventDefault();
+  };
+  const [inputErrors, setInputErrors] = useState({
+    monthlySpend: "",
+    teamSize: "",
+  });
   const isToolDataComplete =
     toolData.toolName !== "" &&
     toolData.planType !== "" &&
     toolData.monthlySpend !== "" &&
     toolData.teamSize !== "";
+
   function onSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     const finalTools = isToolDataComplete
@@ -120,37 +127,52 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
                   type="number"
                   placeholder="Monthly Spend"
                   value={toolData.monthlySpend}
+                  onKeyDown={blockNonNumeric}
                   onChange={(e) => {
-                    setToolData((prev) => ({
+                    const val = e.target.value;
+                    const num = Number(val);
+                    setInputErrors((prev) => ({
                       ...prev,
                       monthlySpend:
-                        e.target.value === ""
-                          ? ""
-                          : Number(e.target.value) < 0
-                            ? 0
-                            : Number(e.target.value),
+                        val !== "" && num <= 0 ? "Enter a number > 0" : "",
+                    }));
+                    setToolData((prev) => ({
+                      ...prev,
+                      monthlySpend: val === "" ? "" : num < 0 ? 0 : num,
                     }));
                   }}
                   className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
                 />
-
+                {inputErrors.monthlySpend && (
+                  <p className="text-red-400 text-xs -mt-2">
+                    {inputErrors.monthlySpend}
+                  </p>
+                )}
                 <input
                   type="number"
                   placeholder="Team Size"
                   value={toolData.teamSize}
+                  onKeyDown={blockNonNumeric}
                   onChange={(e) => {
-                    setToolData((prev) => ({
+                    const val = e.target.value;
+                    const num = Number(val);
+                    setInputErrors((prev) => ({
                       ...prev,
                       teamSize:
-                        e.target.value === ""
-                          ? ""
-                          : Number(e.target.value) < 0
-                            ? 0
-                            : Number(e.target.value),
+                        val !== "" && num <= 0 ? "Enter a number > 0" : "",
+                    }));
+                    setToolData((prev) => ({
+                      ...prev,
+                      teamSize: val === "" ? "" : num < 0 ? 0 : num,
                     }));
                   }}
                   className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
                 />
+                {inputErrors.teamSize && (
+                  <p className="text-red-400 text-xs -mt-2">
+                    {inputErrors.teamSize}
+                  </p>
+                )}
               </div>
             )}
             <button
@@ -172,6 +194,8 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
                 toolData.planType === "" ||
                 toolData.monthlySpend === "" ||
                 toolData.teamSize === "" ||
+                Number(toolData.monthlySpend) <= 0 ||
+                Number(toolData.teamSize) <= 0 ||
                 formData.primaryUseCase === "" ||
                 loading
               }
@@ -184,6 +208,9 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
               disabled={
                 formData.primaryUseCase === "" ||
                 (!isToolDataComplete && formData.tools.length === 0) ||
+                (isToolDataComplete &&
+                  (Number(toolData.monthlySpend) <= 0 ||
+                    Number(toolData.teamSize) <= 0)) ||
                 loading
               }
               className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
