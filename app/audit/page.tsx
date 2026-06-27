@@ -15,7 +15,10 @@ export default function AuditPage() {
     <>
       <div className="flex flex-col justify-center min-h-screen gap-4 overflow-auto max-w-5xl p-4 mx-auto">
         {result.tools.map((tool: ToolAuditResult) => (
-          <AuditCard key={tool.toolName} tool={tool} />
+          <div key={tool.toolName} className="flex flex-col gap-2">
+            <AuditCard tool={tool} />
+            <RecommendationBlock tool={tool} />
+          </div>
         ))}
 
         <div className="grid grid-cols-2 gap-4">
@@ -25,9 +28,6 @@ export default function AuditPage() {
             summary={result.summary}
             isHighSavings={result.isHighSavings}
           />
-          {result.tools.map((tool: ToolAuditResult) => (
-            <RecommendationBlock key={tool.toolName} tool={tool} />
-          ))}
         </div>
       </div>
     </>
