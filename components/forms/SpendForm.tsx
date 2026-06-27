@@ -23,14 +23,18 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
   });
   const toolNames = Object.keys(TOOL_PLANS) as ToolName[];
 
+  const isToolDataComplete =
+    toolData.toolName !== "" &&
+    toolData.planType !== "" &&
+    toolData.monthlySpend !== "" &&
+    toolData.teamSize !== "";
   function onSubmit(e: React.SubmitEvent) {
     e.preventDefault();
-    const updatedFormData = {
-      ...formData,
-      tools: [...formData.tools, toolData],
-    };
-    console.log(`data submitted : ${updatedFormData}`);
-    handleSubmit(updatedFormData);
+    const finalTools = isToolDataComplete
+      ? [...formData.tools, toolData]
+      : formData.tools;
+    console.log(`data submitted :  ${finalTools}`);
+    handleSubmit({ ...formData, tools: finalTools });
   }
 
   return (
@@ -73,7 +77,6 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
                 }));
               }}
               className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg outline-none focus:border-neutral-500"
-              required
             >
               <option value="" disabled>
                 Select a tool
@@ -180,7 +183,7 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
               type="submit"
               disabled={
                 formData.primaryUseCase === "" ||
-                formData.tools.length === 0 ||
+                (!isToolDataComplete && formData.tools.length === 0) ||
                 loading
               }
               className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
