@@ -2,11 +2,13 @@
 import { useState} from 'react';
 import type { AuditFormData} from "@/lib/audit/types";
 import {AuditResult} from "@/lib/audit/types";
+import useLocalStorage from "@/hooks/useLocalStorage"
 
 export default function useAudit(){
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [result, setResult] = useState<AuditResult | null>(null);
+    const [, setStoredResult] = useLocalStorage<AuditResult | null>("auditResult", null); 
 
     async function submitAudit(formData : AuditFormData){
         setLoading(true);
@@ -23,6 +25,7 @@ export default function useAudit(){
             if (!res.ok) throw new Error(data.error || res.statusText);
             
             setResult(data);
+            setStoredResult(data);
         }catch(err){
             setError(err instanceof Error ? err.message : "Something went wrong");
         }finally{
