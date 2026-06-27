@@ -2,7 +2,7 @@
 import { useState} from 'react';
 import type { AuditFormData} from "@/lib/audit/types";
 import {AuditResult} from "@/lib/audit/types";
-import useLocalStorage from "@/hooks/useLocalStorage"
+import useLocalStorage from "@/hooks/useLocalStorage";
 
 export default function useAudit(){
     const [loading, setLoading] = useState(false);
