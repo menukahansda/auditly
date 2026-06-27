@@ -4,6 +4,7 @@ import type { ToolName, ToolFormData, AuditFormData } from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
 // import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
+import AddedTools from "./AddedTools";
 
 type Props = {
   handleSubmit: (toolData: AuditFormData) => void;
@@ -34,6 +35,7 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-[#0a0a0a] px-4">
+      <div className="flex gap-6 w-full max-w-3xl">
       <div className="w-full max-w-lg p-8 rounded-2xl bg-[#111111] border border-neutral-800 shadow-[0_0_60px_rgba(255,255,255,0.15)]">
         <h1 className="text-2xl font-bold text-neutral-100 mb-6 text-center">
           AI Tool Spend Form
@@ -186,7 +188,20 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
             {loading ? "Submitting..." : "Submit"}
           </button>
         </form>
+        
       </div>
+      {formData.tools.length > 0 && (
+          <AddedTools
+            tools={formData.tools}
+            onRemove={(index) =>
+              setFormData((prev) => ({
+                ...prev,
+                tools: prev.tools.filter((_, i) => i !== index),
+              }))
+            }
+          />
+        )}
+        </div>
     </div>
   );
 }
