@@ -19,14 +19,25 @@ export default function AuditCard({ tool }: { tool: ToolAuditResult }) {
         </div>
 
         <p className="text-sm text-neutral-400">
-          Spend drops from{" "}
-          <span className="line-through text-neutral-500">
-            ${tool.currentSpend.toFixed(2)}/mo
-          </span>{" "}
-          to{" "}
-          <span className="text-neutral-200">
-            ${(tool.currentSpend - tool.monthlySavings).toFixed(2)}/mo
-          </span>
+          {tool.monthlySavings > 0 ? (
+            <>
+              Spend drops from{" "}
+              <span className="line-through text-neutral-500">
+                ${tool.currentSpend.toFixed(2)}/mo
+              </span>{" "}
+              to{" "}
+              <span className="text-neutral-200">
+                ${(tool.currentSpend - tool.monthlySavings).toFixed(2)}/mo
+              </span>
+            </>
+          ) : (
+            <>
+              Current spend:{" "}
+              <span className="text-neutral-200">
+                ${tool.currentSpend.toFixed(2)}/mo
+              </span>
+            </>
+          )}
         </p>
 
         <p className="text-sm text-neutral-400">{tool.reason}</p>

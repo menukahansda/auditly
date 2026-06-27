@@ -6,6 +6,8 @@ export default function AuditSummary({ monthlySavings, annualSavings, summary, i
       <div className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg">
 
         {/* savings section */}
+        {monthlySavings > 0 && (
+        <>
         <h2>Potential Savings</h2>
         <div className="flex flex-row gap-4">
           <div className="flex flex-col">
@@ -17,7 +19,8 @@ export default function AuditSummary({ monthlySavings, annualSavings, summary, i
             <p>${annualSavings.toFixed(2)}</p>
           </div>
         </div>
-
+        </>
+      )}
         {/* summary section */}
         <h2>Summary</h2>
         <p>{summary}</p>
