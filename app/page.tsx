@@ -2,13 +2,13 @@
 
 import SpendForm from "@/components/forms/SpendForm";
 import useAudit from "@/hooks/useAudit";
-import { useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Home() {
-  const {submitAudit, loading, error, result} = useAudit();
+  const { submitAudit, loading, error, result } = useAudit();
   const router = useRouter();
-  
+
   useEffect(() => {
     if (result) {
       router.push("/audit");
@@ -17,11 +17,13 @@ export default function Home() {
 
   return (
     <>
-      {!result && !loading && <SpendForm handleSubmit={submitAudit} loading={loading}/>}
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
+      {!loading && !error && !result && (
+        <SpendForm handleSubmit={submitAudit} loading={loading} />
+      )}
+      <button onClick={() => router.push("/audit")}>Test audit page</button>
     </>
-      
   );
 }
 
