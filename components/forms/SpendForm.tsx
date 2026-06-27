@@ -28,6 +28,7 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
       ...formData,
       tools: [...formData.tools, toolData],
     };
+    console.log(`data submitted : ${updatedFormData}`);
     handleSubmit(updatedFormData);
   }
 
@@ -175,7 +176,11 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
           </button>
           <button
             type="submit"
-            disabled={formData.primaryUseCase === "" || formData.tools.length === 0 ||loading}
+            disabled={
+              formData.primaryUseCase === "" ||
+              formData.tools.length === 0 ||
+              loading
+            }
             className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
           >
             {loading ? "Submitting..." : "Submit"}
