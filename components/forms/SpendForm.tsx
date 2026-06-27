@@ -36,161 +36,160 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
   return (
     <div className="min-h-screen flex justify-center items-center bg-[#0a0a0a] px-4">
       <div className="flex gap-6 w-full max-w-3xl">
-      <div className="w-full max-w-lg p-8 rounded-2xl bg-[#111111] border border-neutral-800 shadow-[0_0_60px_rgba(255,255,255,0.15)]">
-        <h1 className="text-2xl font-bold text-neutral-100 mb-6 text-center">
-          AI Tool Spend Form
-        </h1>
+        <div className="w-full max-w-lg p-8 rounded-2xl bg-[#111111] border border-neutral-800 shadow-[0_0_60px_rgba(255,255,255,0.15)]">
+          <h1 className="text-2xl font-bold text-neutral-100 mb-6 text-center">
+            AI Tool Spend Form
+          </h1>
 
-        <form className="flex flex-col gap-4" onSubmit={onSubmit}>
-          <select
-            value={formData.primaryUseCase}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                primaryUseCase: e.target.value,
-              }));
-            }}
-            className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg"
-          >
-            <option value="" disabled>
-              Select primary use case
-            </option>
-
-            {PRIMARY_USE_CASES.map((useCase) => (
-              <option key={useCase} value={useCase}>
-                {useCase}
-              </option>
-            ))}
-          </select>
-          <select
-            name="toolName"
-            value={toolData.toolName}
-            onChange={(e) => {
-              setToolData((prev) => ({
-                ...prev,
-                toolName: e.target.value,
-                planType: "",
-              }));
-            }}
-            className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg outline-none focus:border-neutral-500"
-            required
-          >
-            <option value="" disabled>
-              Select a tool
-            </option>
-
-            {toolNames.map((tool) => (
-              <option key={tool} value={tool}>
-                {tool}
-              </option>
-            ))}
-          </select>
-
-          {toolData.toolName && (
+          <form className="flex flex-col gap-4" onSubmit={onSubmit}>
             <select
-              value={toolData.planType}
+              value={formData.primaryUseCase}
               onChange={(e) => {
-                setToolData((prev) => ({
+                setFormData((prev) => ({
                   ...prev,
-                  planType: e.target.value,
-                  monthlySpend: "",
-                  teamSize: "",
+                  primaryUseCase: e.target.value,
                 }));
               }}
-              className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg outline-none focus:border-neutral-500"
+              className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg"
             >
               <option value="" disabled>
-                Select a plan
+                Select primary use case
               </option>
 
-              {TOOL_PLANS[toolData.toolName as ToolName]?.map((plan) => (
-                <option key={plan} value={plan}>
-                  {plan}
+              {PRIMARY_USE_CASES.map((useCase) => (
+                <option key={useCase} value={useCase}>
+                  {useCase}
                 </option>
               ))}
             </select>
-          )}
+            <select
+              name="toolName"
+              value={toolData.toolName}
+              onChange={(e) => {
+                setToolData((prev) => ({
+                  ...prev,
+                  toolName: e.target.value,
+                  planType: "",
+                }));
+              }}
+              className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg outline-none focus:border-neutral-500"
+              required
+            >
+              <option value="" disabled>
+                Select a tool
+              </option>
 
-          {toolData.planType && (
-            <div className="flex flex-col gap-4">
-              <input
-                type="number"
-                placeholder="Monthly Spend"
-                value={toolData.monthlySpend}
+              {toolNames.map((tool) => (
+                <option key={tool} value={tool}>
+                  {tool}
+                </option>
+              ))}
+            </select>
+
+            {toolData.toolName && (
+              <select
+                value={toolData.planType}
                 onChange={(e) => {
                   setToolData((prev) => ({
                     ...prev,
-                    monthlySpend:
-                      e.target.value === ""
-                        ? ""
-                        : Number(e.target.value) < 0
-                          ? 0
-                          : Number(e.target.value),
+                    planType: e.target.value,
+                    monthlySpend: "",
+                    teamSize: "",
                   }));
                 }}
-                className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
-              />
+                className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg outline-none focus:border-neutral-500"
+              >
+                <option value="" disabled>
+                  Select a plan
+                </option>
 
-              <input
-                type="number"
-                placeholder="Team Size"
-                value={toolData.teamSize}
-                onChange={(e) => {
-                  setToolData((prev) => ({
-                    ...prev,
-                    teamSize:
-                      e.target.value === ""
-                        ? ""
-                        : Number(e.target.value) < 0
-                          ? 0
-                          : Number(e.target.value),
-                  }));
-                }}
-                className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
-              />
-            </div>
-          )}
-          <button
-            type="button"
-            onClick={() => {
-              setFormData((prev) => ({
-                ...prev,
-                tools: [...prev.tools, toolData],
-              }));
-              setToolData({
-                toolName: "",
-                planType: "",
-                monthlySpend: "",
-                teamSize: "",
-              });
-            }}
-            disabled={
-              toolData.toolName === "" ||
-              toolData.planType === "" ||
-              toolData.monthlySpend === "" ||
-              toolData.teamSize === "" ||
-              formData.primaryUseCase === "" ||
-              loading
-            }
-            className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
-          >
-            Add more tools
-          </button>
-          <button
-            type="submit"
-            disabled={
-              formData.primaryUseCase === "" ||
-              formData.tools.length === 0 ||
-              loading
-            }
-            className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
-          >
-            {loading ? "Submitting..." : "Submit"}
-          </button>
-        </form>
-        
-      </div>
-      {formData.tools.length > 0 && (
+                {TOOL_PLANS[toolData.toolName as ToolName]?.map((plan) => (
+                  <option key={plan} value={plan}>
+                    {plan}
+                  </option>
+                ))}
+              </select>
+            )}
+
+            {toolData.planType && (
+              <div className="flex flex-col gap-4">
+                <input
+                  type="number"
+                  placeholder="Monthly Spend"
+                  value={toolData.monthlySpend}
+                  onChange={(e) => {
+                    setToolData((prev) => ({
+                      ...prev,
+                      monthlySpend:
+                        e.target.value === ""
+                          ? ""
+                          : Number(e.target.value) < 0
+                            ? 0
+                            : Number(e.target.value),
+                    }));
+                  }}
+                  className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
+                />
+
+                <input
+                  type="number"
+                  placeholder="Team Size"
+                  value={toolData.teamSize}
+                  onChange={(e) => {
+                    setToolData((prev) => ({
+                      ...prev,
+                      teamSize:
+                        e.target.value === ""
+                          ? ""
+                          : Number(e.target.value) < 0
+                            ? 0
+                            : Number(e.target.value),
+                    }));
+                  }}
+                  className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg placeholder:text-neutral-500"
+                />
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => {
+                setFormData((prev) => ({
+                  ...prev,
+                  tools: [...prev.tools, toolData],
+                }));
+                setToolData({
+                  toolName: "",
+                  planType: "",
+                  monthlySpend: "",
+                  teamSize: "",
+                });
+              }}
+              disabled={
+                toolData.toolName === "" ||
+                toolData.planType === "" ||
+                toolData.monthlySpend === "" ||
+                toolData.teamSize === "" ||
+                formData.primaryUseCase === "" ||
+                loading
+              }
+              className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
+            >
+              Add more tools
+            </button>
+            <button
+              type="submit"
+              disabled={
+                formData.primaryUseCase === "" ||
+                formData.tools.length === 0 ||
+                loading
+              }
+              className="bg-neutral-100 text-black font-semibold p-3 rounded-lg hover:opacity-90"
+            >
+              {loading ? "Submitting..." : "Submit"}
+            </button>
+          </form>
+        </div>
+        {formData.tools.length > 0 && (
           <AddedTools
             tools={formData.tools}
             onRemove={(index) =>
@@ -201,7 +200,7 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
             }
           />
         )}
-        </div>
+      </div>
     </div>
   );
 }
