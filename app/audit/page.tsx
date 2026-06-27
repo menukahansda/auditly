@@ -1,3 +1,5 @@
+"use client"
+
 import AuditCard from "@/components/audit/AuditCard";
 import AuditSummary from "@/components/audit/AuditSummary";
 import RecommendationBlock from "@/components/audit/RecommendationBlock";
