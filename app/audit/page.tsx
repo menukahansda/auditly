@@ -2,12 +2,33 @@
 
 import AuditCard from "@/components/audit/AuditCard";
 import AuditSummary from "@/components/audit/AuditSummary";
-import { AuditResult, ToolAuditResult } from "@/lib/audit/types";
+import { AuditResult, ToolAuditResult, AuditFormData } from "@/lib/audit/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
+import { useState, useEffect } from "react";
 
 export default function AuditPage() {
   const [result] = useLocalStorage<AuditResult | null>("auditResult", null);
+  const [formData] = useLocalStorage<AuditFormData | null>(
+    "auditFormData",
+    null,
+  );
+  const [summary, setSummary] = useState<string>("Generating summary...");
+  
+  useEffect(() => {
+    if (!result || !formData) return;
 
+    async function fetchSummary() {
+      const res = await fetch("/api/summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userInput: formData, auditResult: result }),
+      });
+      const data = await res.json();
+      setSummary(data);
+    }
+
+    fetchSummary();
+  }, [result, formData]);
   if (!result) return <p>No audit found.</p>;
 
   return (
@@ -22,7 +43,7 @@ export default function AuditPage() {
         <AuditSummary
           monthlySavings={result.totalMonthlySavings}
           annualSavings={result.totalAnnualSavings}
-          summary={result.summary}
+          summary={summary}
           isHighSavings={result.isHighSavings}
         />
       </div>
