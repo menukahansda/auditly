@@ -295,32 +295,6 @@ function calculateTotals(
 	};
 }
 
-function generateSummary(
-	result: Omit<AuditResult, "summary" | "cta">
-): string {
-	if (result.totalMonthlySavings > 500) {
-		return (
-			`High optimization potential detected. ` +
-			`Estimated savings: $${result.totalMonthlySavings}/month ` +
-			`($${result.totalAnnualSavings}/year). ` +
-			`Several tools appear over-provisioned for current team usage.`
-		);
-	}
-
-	if (result.totalMonthlySavings < 100) {
-		return (
-			"Your current AI tooling setup appears efficient overall. " +
-			"No major cost reductions were identified."
-		);
-	}
-
-	return (
-		`Potential savings identified: $${result.totalMonthlySavings}/month ` +
-		`($${result.totalAnnualSavings}/year). ` +
-		"Some plans may be larger than necessary for your current usage."
-	);
-}
-
 function generateCTA(
 	totalMonthlySavings: number
 ): string {
@@ -365,12 +339,10 @@ export function generateAudit(
 			totals.isHighSavings,
 	}; // this is the result for a single tool
 	const cta = generateCTA(totals.totalMonthlySavings);
-	const summary =
-		generateSummary(partialResult);
 
 	return {
 		...partialResult,
 		cta,
-		summary,
+		summary: "",
 	};
 }
