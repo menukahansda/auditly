@@ -13,6 +13,7 @@ export default function AuditPage() {
     null,
   );
   const [summary, setSummary] = useState<string>("Generating summary...");
+  const [isLoadingSummary, setIsLoadingSummary] = useState(true);
   
   useEffect(() => {
     if (!result || !formData) return;
@@ -25,6 +26,7 @@ export default function AuditPage() {
       });
       const data = await res.json();
       setSummary(data);
+      setIsLoadingSummary(false);
     }
 
     fetchSummary();
@@ -45,6 +47,7 @@ export default function AuditPage() {
           annualSavings={result.totalAnnualSavings}
           summary={summary}
           isHighSavings={result.isHighSavings}
+          isLoadingSummary={summary === "Generating summary..."}
         />
       </div>
     </>
