@@ -1,6 +1,6 @@
 "use client";
 
-export default function AuditSummary({ monthlySavings, annualSavings, summary, isHighSavings }: { monthlySavings: number; annualSavings: number; summary: string; isHighSavings: boolean }) {
+export default function AuditSummary({ monthlySavings, annualSavings, summary, isHighSavings, isLoadingSummary }: { monthlySavings: number; annualSavings: number; summary: string; isHighSavings: boolean; isLoadingSummary : boolean; }) {
   return (
     <>
       <div className="bg-[#1a1a1a] border border-neutral-700 text-neutral-200 p-3 rounded-lg">
@@ -23,7 +23,15 @@ export default function AuditSummary({ monthlySavings, annualSavings, summary, i
       )}
         {/* summary section */}
         <h2>Summary</h2>
-        <p>{summary}</p>
+        {isLoadingSummary ? (
+          <div className="space-y-2 animate-pulse mt-2">
+            <div className="h-4 bg-neutral-700 rounded w-full" />
+            <div className="h-4 bg-neutral-700 rounded w-4/5" />
+            <div className="h-4 bg-neutral-700 rounded w-3/5" />
+          </div>
+        ) : (
+          <p>{summary}</p>
+        )}
 
         {/* high savings alert */}
         {isHighSavings && (
