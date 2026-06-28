@@ -6,8 +6,8 @@ import generateSummary from "@/lib/ai/summary";
 
 export async function POST(request: NextRequest) {
   try {
-    const userData = await request.json();
-    const result = await generateSummary(userData);
+    const { userInput, auditResult } = await request.json();
+    const result = await generateSummary(userInput, auditResult);
     return NextResponse.json(result, { status: 200 });
   } catch (err) {
     console.error("Error generating summary: ", err);
@@ -16,9 +16,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
-
-export async function GET() {
-  const result = await generateSummary({} as any);
-  return NextResponse.json({ result });
 }
