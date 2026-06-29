@@ -10,6 +10,7 @@ export default function useAudit(){
     const [result, setResult] = useState<AuditResult | null>(null);
     const [, setStoredResult] = useLocalStorage<AuditResult | null>("auditResult", null); 
     const [, setStoredFormData] = useLocalStorage<AuditFormData | null>("auditFormData", null); 
+    const [, setStoredAuditId] = useLocalStorage<string | null>("auditId", null);
 
     async function submitAudit(formData : AuditFormData){
         setLoading(true);
@@ -28,6 +29,7 @@ export default function useAudit(){
             setResult(data);
             setStoredResult(data);
             setStoredFormData(formData);
+            setStoredAuditId(data.auditId); 
         }catch(err){
             setError(err instanceof Error ? err.message : "Something went wrong");
         }finally{

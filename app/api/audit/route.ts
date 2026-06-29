@@ -3,6 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { validateTool, validateUseCase} from "@/utils/validateInput";
 import { generateAudit } from "@/lib/audit/engine";
 import { UserInput, ToolFormData, ToolName, Plan} from "@/lib/audit/types";
+import { insertAuditWithTools } from "@/lib/db/supabase";
 
 export async function POST(request: NextRequest) {
   try {
@@ -32,7 +33,8 @@ export async function POST(request: NextRequest) {
         }))
     };
     const result = await generateAudit(data);
-    return NextResponse.json(result, { status: 200 });
+    const auditId = await insertAuditWithTools(result, data.useCase, data.tools);
+    return NextResponse.json({ ...result, auditId }, { status: 200 });
   } catch (err) {
     console.error("Error processing audit request:", err);
     return NextResponse.json(
