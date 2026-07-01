@@ -46,7 +46,10 @@ export async function insertAuditWithTools(
     .from("audit_tool_results")
     .insert(rows);
 
-  if (toolError) throw new Error(toolError.message);
+  if (toolError) {
+    await supabase.from("audits").delete().eq("id", data.id);
+    throw new Error(toolError.message);
+  }
 
   return data.id;
 }
@@ -64,18 +67,19 @@ export async function getAuditById(id: string) {
 }
 
 export async function createLead(email: string) {
-  const {data, error} = await supabase
+  const { data, error } = await supabase
     .from("leads")
-    .insert({email})
+    .insert({ email })
     .select("id")
     .single();
 
   if (error) {
-    if (error.code === "23505") { // unique_violation
+    if (error.code === "23505") {
+      // unique_violation
       throw new Error("DUPLICATE_EMAIL");
     }
     throw new Error(error.message);
   }
-  
+
   return data.id;
 }
