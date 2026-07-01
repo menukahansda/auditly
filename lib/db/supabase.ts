@@ -62,3 +62,20 @@ export async function getAuditById(id: string) {
   if (error) throw new Error(error.message);
   return data;
 }
+
+export async function createLead(email: string) {
+  const {data, error} = await supabase
+    .from("leads")
+    .insert({email})
+    .select("id")
+    .single();
+
+  if (error) {
+    if (error.code === "23505") { // unique_violation
+      throw new Error("DUPLICATE_EMAIL");
+    }
+    throw new Error(error.message);
+  }
+  
+  return data.id;
+}
