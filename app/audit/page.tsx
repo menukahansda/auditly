@@ -5,6 +5,7 @@ import AuditSummary from "@/components/audit/AuditSummary";
 import { AuditResult, ToolAuditResult, AuditFormData } from "@/lib/audit/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export default function AuditPage() {
   const [result] = useLocalStorage<AuditResult | null>("auditResult", null);
@@ -14,6 +15,9 @@ export default function AuditPage() {
   );
   const [summary, setSummary] = useState<string>("Generating summary...");
   const [isLoadingSummary, setIsLoadingSummary] = useState(true);
+
+  const [auditId] = useLocalStorage<string | null>("auditId", null);
+  const shareUrl = `/audit/${auditId}`;
 
   useEffect(() => {
     if (!result || !formData) return;
@@ -49,9 +53,17 @@ export default function AuditPage() {
           isHighSavings={result.isHighSavings}
           isLoadingSummary={isLoadingSummary}
         />
+        <div className="flex justify-center">
+          <Link
+            href={shareUrl}
+            target="_blank"
+            className="w-fit px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            Go to the shareable URL page
+          </Link>
+        </div>
       </div>
     </>
   );
 }
 
-// define props to send data to each component
