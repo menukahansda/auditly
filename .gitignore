@@ -42,3 +42,7 @@ next-env.d.ts
 
 # notes file for self
 notes.md
+
+
+# supabase config files
+supabase/
