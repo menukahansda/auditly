@@ -22,7 +22,6 @@ export default function Home() {
       {!loading && !error && !result && (
         <SpendForm handleSubmit={submitAudit} loading={loading} />
       )}
-      <button onClick={() => router.push("/audit")}>Test audit page</button>
     </>
   );
 }
