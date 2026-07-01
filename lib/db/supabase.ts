@@ -2,7 +2,6 @@ import { createClient } from "@supabase/supabase-js";
 import { AuditResult, ToolInput } from "../audit/types";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!;
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseServiceKey);
