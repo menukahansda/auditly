@@ -4,7 +4,7 @@ import AuditCard from "@/components/audit/AuditCard";
 import AuditSummary from "@/components/audit/AuditSummary";
 import { AuditResult, ToolAuditResult, AuditFormData } from "@/lib/audit/types";
 import useLocalStorage from "@/hooks/useLocalStorage";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 
 export default function AuditPage() {
@@ -18,6 +18,37 @@ export default function AuditPage() {
 
   const [auditId] = useLocalStorage<string | null>("auditId", null);
   const shareUrl = `/audit/${auditId}`;
+
+  const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  async function copySharedLink() {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.origin}${shareUrl}`,
+      );
+
+      setCopied(true);
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false);
+      }, 3000);
+    } catch (error) {
+      console.error("Failed to copy link:", error);
+    }
+  }
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (!result || !formData) return;
@@ -61,9 +92,14 @@ export default function AuditPage() {
           >
             Go to the shareable URL page
           </Link>
+          <button
+            onClick={copySharedLink}
+            className="w-fit px-4 py-2 bg-green-500 text-white rounded ml-4"
+          >
+            {copied ? "Copied!" : "Copy share link"}
+          </button>
         </div>
       </div>
     </>
   );
 }
-
