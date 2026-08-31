@@ -19,18 +19,18 @@ export default async function SharedAuditPage({ params }: SharedAuditPageProps) 
   }
 
   const tools: ToolAuditResult[] = (audit.audit_tool_results ?? []).map(
-    (tool): ToolAuditResult => ({
+    (tool ): ToolAuditResult => ({
       toolName: tool.tool_name as ToolName,
-      currentSpend: tool.current_spend,
+      currentSpend: tool.current_spend ?? 0,
       recommendedPlan: tool.recommended_plan
         ? (tool.recommended_plan as Plan<ToolName>)
         : undefined,
       recommendedAlternative: tool.recommended_alternative
         ? (tool.recommended_alternative as ToolName)
         : undefined,
-      monthlySavings: tool.monthly_savings,
-      annualSavings: tool.annual_savings,
-      reason: tool.reason,
+      monthlySavings: tool.monthly_savings ?? 0,
+      annualSavings: tool.annual_savings ?? 0,
+      reason: tool.reason ?? "",
     })
   );
 
@@ -57,9 +57,9 @@ export default async function SharedAuditPage({ params }: SharedAuditPageProps) 
         <div className="mt-10">
           <AuditSummary
             monthlySavings={audit.total_monthly_savings}
-            annualSavings={audit.total_annual_savings}
-            summary={audit.summary}
-            isHighSavings={audit.is_high_savings}
+            annualSavings={audit.total_annual_savings ?? 0}
+            summary={audit.summary ?? ""}
+            isHighSavings={audit.is_high_savings ?? false}
             isLoadingSummary={false}
           />
         </div>
