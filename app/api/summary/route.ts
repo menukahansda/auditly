@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     };
 
     const result = await generateSummary(convertedInput, auditResult);
-    return NextResponse.json(result, { status: 200 });
+    return NextResponse.json({ summary: result }, { status: 200 });
   } catch (err) {
     console.error("Error generating summary: ", err);
     return NextResponse.json(

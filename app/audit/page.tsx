@@ -54,14 +54,25 @@ export default function AuditPage() {
     if (!result || !formData) return;
 
     async function fetchSummary() {
-      const res = await fetch("/api/summary", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userInput: formData, auditResult: result }),
-      });
-      const data = await res.json();
-      setSummary(data);
-      setIsLoadingSummary(false);
+      try {
+        const res = await fetch("/api/summary", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userInput: formData, auditResult: result }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setSummary("Summary generation failed. Please try again."); // fallback string
+          console.error(data.error);
+        } else {
+          setSummary(data.summary);
+        }
+      } catch (err) {
+        setSummary("Summary generation failed. Please try again.");
+        console.error(err);
+      } finally {
+        setIsLoadingSummary(false);
+      }
     }
 
     fetchSummary();
