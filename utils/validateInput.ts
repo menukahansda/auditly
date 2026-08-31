@@ -9,7 +9,8 @@ import type { Plan, ToolName, UseCase, ToolFormData } from "../lib/audit/types";
 
 export function validateTool(input: ToolFormData): {valid: boolean; errors: string} {
    
-    const{toolName, planType, monthlySpend, teamSize} = input;
+    const { toolName, planType, monthlySpend, teamSize } = input;
+    const primaryUseCase = (input as Record<string, unknown>).primaryUseCase as string;
 
     // check toolName 
     if(!toolName || !(toolName in TOOL_PLANS)){
@@ -19,7 +20,7 @@ export function validateTool(input: ToolFormData): {valid: boolean; errors: stri
     // check plan
     const validPlans = TOOL_PLANS[toolName as ToolName] as readonly Plan[];
     if(!planType || !validPlans.includes(planType as Plan<ToolName>)){
-        return {valid: false, errors: "Invalid plan for the selected tool"};
+        return {valid: false, errors: "Invalid plan type for the selected tool"};
     }
 
     // check monthlySpend
@@ -32,13 +33,18 @@ export function validateTool(input: ToolFormData): {valid: boolean; errors: stri
         return {valid: false, errors: "Team size must be a positive number"};
     }
 
+    // check primaryUseCase
+    const useCaseCheck = validateUseCase(primaryUseCase);
+    if (!useCaseCheck.valid) {
+        return useCaseCheck;
+    }
     return {valid: true, errors: ""};
 }
 
 export function validateUseCase(useCase: string): {valid: boolean; errors: string} {
     // check useCase
     if(!useCase || !PRIMARY_USE_CASES.includes(useCase as UseCase)){
-        return {valid: false, errors: "Invalid use case"};
+        return {valid: false, errors: "Invalid primary use case"};
     }
     return {valid: true, errors: ""};
 }
