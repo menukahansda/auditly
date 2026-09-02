@@ -10,7 +10,6 @@ import type { Plan, ToolName, UseCase, ToolFormData } from "../lib/audit/types";
 export function validateTool(input: ToolFormData): {valid: boolean; errors: string} {
    
     const { toolName, planType, monthlySpend, teamSize } = input;
-    const primaryUseCase = (input as Record<string, unknown>).primaryUseCase as string;
 
     // check toolName 
     if(!toolName || !(toolName in TOOL_PLANS)){
@@ -33,11 +32,6 @@ export function validateTool(input: ToolFormData): {valid: boolean; errors: stri
         return {valid: false, errors: "Team size must be a positive number"};
     }
 
-    // check primaryUseCase
-    const useCaseCheck = validateUseCase(primaryUseCase);
-    if (!useCaseCheck.valid) {
-        return useCaseCheck;
-    }
     return {valid: true, errors: ""};
 }
 
