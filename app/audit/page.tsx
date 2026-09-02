@@ -58,7 +58,11 @@ export default function AuditPage() {
         const res = await fetch("/api/summary", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userInput: formData, auditResult: result }),
+          body: JSON.stringify({
+            userInput: formData,
+            auditResult: result,
+            auditId: auditId ?? undefined,
+          }),
         });
         const data = await res.json();
         if (!res.ok) {
@@ -66,6 +70,15 @@ export default function AuditPage() {
           console.error(data.error);
         } else {
           setSummary(data.summary);
+          if (auditId && data.persisted === false) {
+            // Generation succeeded but saving it to the audit record failed —
+            // the visitor still sees their summary, but the shareable /audit/[id]
+            // page won't have it until this is retried.
+            console.error(
+              "Summary generated but not saved to the audit record:",
+              data.persistError,
+            );
+          }
         }
       } catch (err) {
         setSummary("Summary generation failed. Please try again.");
@@ -76,7 +89,7 @@ export default function AuditPage() {
     }
 
     fetchSummary();
-  }, [result, formData]);
+  }, [result, formData, auditId]);
   if (!result) return <p>No audit found.</p>;
 
   return (

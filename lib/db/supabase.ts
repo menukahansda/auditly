@@ -55,6 +55,15 @@ export async function insertAuditWithTools(
   return data.id;
 }
 
+export async function updateAuditSummary(auditId: string, summary: string) {
+  const { error } = await supabase
+    .from("audits")
+    .update({ summary })
+    .eq("id", auditId);
+
+  if (error) throw new Error(error.message);
+}
+
 export async function getAuditById(id: string) {
   const { data, error } = await supabase
     .from("audits")
