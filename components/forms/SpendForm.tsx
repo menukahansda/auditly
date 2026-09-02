@@ -2,25 +2,40 @@
 // make it so that user can send multiple tools in single form
 import type { ToolName, ToolFormData, AuditFormData } from "@/lib/audit/types";
 import { PRIMARY_USE_CASES, TOOL_PLANS } from "@/lib/audit/constants";
-// import useLocalStorage from "@/hooks/useLocalStorage";
+import useLocalStorage from "@/hooks/useLocalStorage";
 import { useState } from "react";
 import AddedTools from "./AddedTools";
+
+// localStorage keys for the in-progress form draft. 
+export const SPEND_FORM_DRAFT_KEY = "spendFormDraft";
+export const SPEND_FORM_TOOL_DRAFT_KEY = "spendFormToolDraft";
+
+// "empty" shape of spendform
+export const emptySpendFormData: AuditFormData = {
+  tools: [],
+  primaryUseCase: "",
+};
+
+export const emptyToolFormData: ToolFormData = {
+  toolName: "",
+  planType: "",
+  monthlySpend: "",
+  teamSize: "",
+};
 
 type Props = {
   handleSubmit: (toolData: AuditFormData) => void;
   loading: boolean;
 };
 export default function SpendForm({ handleSubmit, loading }: Props) {
-  const [formData, setFormData] = useState<AuditFormData>({
-    tools: [],
-    primaryUseCase: "",
-  });
-  const [toolData, setToolData] = useState<ToolFormData>({
-    toolName: "",
-    planType: "",
-    monthlySpend: "",
-    teamSize: "",
-  });
+  const [formData, setFormData] = useLocalStorage<AuditFormData>(
+    SPEND_FORM_DRAFT_KEY,
+    emptySpendFormData,
+  );
+  const [toolData, setToolData] = useLocalStorage<ToolFormData>(
+    SPEND_FORM_TOOL_DRAFT_KEY,
+    emptyToolFormData,
+  );
   const toolNames = Object.keys(TOOL_PLANS) as ToolName[];
   const blockNonNumeric = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (["e", "E", "+", "-", "."].includes(e.key)) e.preventDefault();
@@ -182,12 +197,7 @@ export default function SpendForm({ handleSubmit, loading }: Props) {
                   ...prev,
                   tools: [...prev.tools, toolData],
                 }));
-                setToolData({
-                  toolName: "",
-                  planType: "",
-                  monthlySpend: "",
-                  teamSize: "",
-                });
+                setToolData(emptyToolFormData);
               }}
               disabled={
                 toolData.toolName === "" ||
