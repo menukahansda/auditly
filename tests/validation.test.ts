@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import{ validateTool} from "../utils/validateInput";
+import { validateTool, validateUseCase } from "../utils/validateInput";
 
 describe("Form Input Validation", () => {
   it("validates the tool name input", () => {
@@ -29,7 +29,7 @@ describe("Form Input Validation", () => {
   it("invalidates an incorrect plan type for a valid tool", () => {
     const result = validateTool({
       toolName: "ChatGPT",
-      planType: "Hobby" , // Hobby is not a valid plan for ChatGPT
+      planType: "Hobby", // Hobby is not a valid plan for ChatGPT
       monthlySpend: 20,
       teamSize: 1,
       primaryUseCase: "mixed",
@@ -62,17 +62,7 @@ describe("Form Input Validation", () => {
     expect(result.errors).toBe("Team size must be a positive number");
   });
 
-  it("invalidates an incorrect primary use case", () => {
-    const result = validateTool({
-      toolName: "ChatGPT",
-      planType: "Plus",
-      monthlySpend: 20,
-      teamSize: 1,
-      primaryUseCase: "unknown",
-    } as any);
-    expect(result.valid).toBe(false);
-    expect(result.errors).toBe("Invalid primary use case");
-  });
+  
 
   it("invalidates empty monthly spend", () => {
     const result = validateTool({
@@ -98,18 +88,6 @@ describe("Form Input Validation", () => {
     expect(result.errors).toBe("Team size must be a positive number");
   });
 
-  it("invalidates empty primary use case", () => {
-    const result = validateTool({
-      toolName: "ChatGPT",
-      planType: "Plus",
-      monthlySpend: 20,
-      teamSize: 1,
-      primaryUseCase: "",
-    } as any);
-    expect(result.valid).toBe(false);
-    expect(result.errors).toBe("Invalid primary use case");
-  });
-
   it("validates zero monthly spend", () => {
     const result = validateTool({
       toolName: "ChatGPT",
@@ -117,8 +95,26 @@ describe("Form Input Validation", () => {
       monthlySpend: 0, // 0 is valid, not negative
       teamSize: 1,
       primaryUseCase: "mixed",
-    } as any );
+    } as any);
     expect(result.valid).toBe(true);
-    
+  });
+
+  it("invalidates an incorrect primary use case", () => {
+    const result = validateUseCase("unknown");
+    expect(result.valid).toBe(false);
+    expect(result.errors).toBe("Invalid primary use case");
+  });
+
+  it("invalidates empty primary use case", () => {
+    const result = validateUseCase("");
+    expect(result.valid).toBe(false);
+    expect(result.errors).toBe("Invalid primary use case");
+  });
+  
+  it("validates a correct primary use case", () => {
+    const result = validateUseCase("mixed");
+
+    expect(result.valid).toBe(true);
+    expect(result.errors).toBe("");
   });
 });
