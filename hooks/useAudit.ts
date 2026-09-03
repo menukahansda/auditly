@@ -36,6 +36,12 @@ export default function useAudit(){
             setLoading(false);
         }
     }
-    return {submitAudit, loading, error, result};
+
+    // dismiss an error and show the form again with persistent data
+    function resetError() {
+        setError(null);
+    }
+
+    return {submitAudit, loading, error, result, resetError};
 }
            
