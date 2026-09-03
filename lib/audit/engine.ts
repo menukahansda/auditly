@@ -32,6 +32,16 @@ function calculatePlanCost(
 	return pricePerSeat * seats;
 }
 
+// Plans billed by usage 
+const METERED_PLANS = ["API direct", "API"] as const;
+
+const METERED_PLAN_REASON =
+	"This plan is billed by usage. Auditly doesn't collect token volume, model mix, or workload details, so it can't identify a savings opportunity here — review your API usage directly.";
+
+function isMeteredPlan(plan: Plan): boolean {
+	return (METERED_PLANS as readonly string[]).includes(plan);
+}
+
 function getDefaultAlternativePlan(
 	toolName: ToolName
 ): Plan | undefined {
@@ -67,10 +77,17 @@ function evaluateTool(
 
 	const currentSpend = tool.monthlySpend;
 
+	const metered = isMeteredPlan(tool.plan);
+
 	// Plan downgrade suggestions
 
+	// Usage-based plans can't be optimised 
+	if (metered) {
+		reasons.push(METERED_PLAN_REASON);
+	}
+
 	// ChatGPT Business -> Plus
-	if (
+	else if (
 		tool.toolName === "ChatGPT" &&
 		tool.plan === "Business" &&
 		tool.teamSize <= 2
@@ -146,10 +163,48 @@ function evaluateTool(
 		);
 	}
 
+	// Gemini Ultra -> Pro
+	else if (
+		tool.toolName === "Gemini" &&
+		tool.plan === "Ultra"
+	) {
+		recommendedPlan = "Pro";
+
+		reasons.push(
+			"Ultra is Gemini's heaviest tier; Pro is the next tier down and is usually sufficient."
+		);
+	}
+
+	// Windsurf Team -> Pro
+	else if (
+		tool.toolName === "Windsurf" &&
+		tool.plan === "Team" &&
+		tool.teamSize === 1
+	) {
+		recommendedPlan = "Pro";
+
+		reasons.push(
+			"Windsurf Team's collaboration features aren't usable by a single developer."
+		);
+	}
+
+	// Windsurf Max -> Pro
+	else if (
+		tool.toolName === "Windsurf" &&
+		tool.plan === "Max"
+	) {
+		recommendedPlan = "Pro";
+
+		reasons.push(
+			"Max is Windsurf's heaviest usage tier; Pro is the next tier down and is often sufficient."
+		);
+	}
+
 	// Alternative recommendations based on use case
 
 	// Coding-heavy teams
 	if (
+		!metered &&
 		useCase === "coding" &&
 		(tool.toolName === "ChatGPT" ||
 			tool.toolName === "Claude")
@@ -163,6 +218,7 @@ function evaluateTool(
 
 	// Research-heavy teams
 	if (
+		!metered &&
 		useCase === "research" &&
 		tool.toolName === "ChatGPT"
 	) {
@@ -175,8 +231,10 @@ function evaluateTool(
 
 	// Writing-heavy teams
 	if (
+		!metered &&
 		useCase === "writing" &&
-		tool.toolName === "Cursor"
+		(tool.toolName === "Cursor" ||
+			tool.toolName === "Windsurf")
 	) {
 		recommendedAlternative = "ChatGPT";
 
@@ -252,7 +310,8 @@ function evaluateTool(
 	if (
 		monthlySavings === 0 &&
 		!recommendedAlternative &&
-		!recommendedPlan
+		!recommendedPlan &&
+		reasons.length === 0
 	) {
 		reasons.push(
 			"Current setup appears appropriately matched to team size and usage."
